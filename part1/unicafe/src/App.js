@@ -27,7 +27,8 @@ const Information = ({ text, value }) => {
   )
 }
 
-const Statistics = ({ good, neutral, bad }) => {
+const Statistics = ({ good, neutral, bad, }) => {
+  let all = good+bad+neutral
   return (
     <div>
       <h1>
@@ -37,6 +38,9 @@ const Statistics = ({ good, neutral, bad }) => {
         <Information text="good" value={good} />
         <Information text="neutral" value={neutral} />
         <Information text="bad" value={bad} />
+        <Information text="all" value={all} />
+        <Information text="average" value={(good - bad)/all} />
+        <Information text="positive" value={(good * 100)/all} />
       </div>
     </div>
   )
