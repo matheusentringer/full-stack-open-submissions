@@ -23,7 +23,10 @@ const Feedback = ({ goodClick, neutralClick, badClick }) => {
 
 const StatisticLine = ({ text, value }) => {
   return (
-    <div>{text} {value}</div>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -36,12 +39,16 @@ const Statistics = ({ good, neutral, bad }) => {
           statistics
         </h1>
         <div>
-          <StatisticLine text="good" value={good} />
-          <StatisticLine text="neutral" value={neutral} />
-          <StatisticLine text="bad" value={bad} />
-          <StatisticLine text="all" value={all} />
-          <StatisticLine text="average" value={(good - bad)/all} />
-          <StatisticLine text="positive" value={(good * 100)/all} />
+          <table>
+            <tbody>
+              <StatisticLine text="good" value={good} />
+              <StatisticLine text="neutral" value={neutral} />
+              <StatisticLine text="bad" value={bad} />
+              <StatisticLine text="all" value={all} />
+              <StatisticLine text="average" value={(good - bad)/all} />
+              <StatisticLine text="positive" value={(good * 100)/all + '%'} />
+            </tbody>
+          </table>
         </div>
       </div>
     )
