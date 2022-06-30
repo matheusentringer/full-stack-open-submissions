@@ -27,23 +27,35 @@ const Information = ({ text, value }) => {
   )
 }
 
-const Statistics = ({ good, neutral, bad, }) => {
+const Statistics = ({ good, neutral, bad }) => {
   let all = good+bad+neutral
-  return (
-    <div>
-      <h1>
-        statistics
-      </h1>
+  if (all > 0){
+    return (
       <div>
-        <Information text="good" value={good} />
-        <Information text="neutral" value={neutral} />
-        <Information text="bad" value={bad} />
-        <Information text="all" value={all} />
-        <Information text="average" value={(good - bad)/all} />
-        <Information text="positive" value={(good * 100)/all} />
+        <h1>
+          statistics
+        </h1>
+        <div>
+          <Information text="good" value={good} />
+          <Information text="neutral" value={neutral} />
+          <Information text="bad" value={bad} />
+          <Information text="all" value={all} />
+          <Information text="average" value={(good - bad)/all} />
+          <Information text="positive" value={(good * 100)/all} />
+        </div>
       </div>
-    </div>
-  )
+    )
+  }else{
+    return(
+      <div>
+        <div>
+          <h1>statistics</h1>
+        </div>
+        <div>No feedback given</div>
+      </div>
+    )
+  }
+  
 }
 
 const App = () => {
