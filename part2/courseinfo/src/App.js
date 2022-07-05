@@ -1,19 +1,29 @@
 const Header = ({ name }) => <h1>{name}</h1>
 
 const Part = ({ part }) => 
-  <li>
+  <div>
     {part.name} {part.exercises}
-  </li>
+  </div>
+
+const Total = ({ course }) => {
+  let total = course.parts.map(part => part.exercises)
+  total = total.reduce((sum, a) => sum + a)
+  return(
+    <b>total of {total} exercises</b>
+  )
+}
 
 const Course = ({ course }) => {
+
   return (
     <div>
       <Header name={course.name} />
-      <ul>
+      <div>
         {course.parts.map(part => 
           <Part key={part.id} part={part} />
         )}
-      </ul>
+      </div>
+      <Total course={course}/>
     </div>
   )
 }
@@ -37,6 +47,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
