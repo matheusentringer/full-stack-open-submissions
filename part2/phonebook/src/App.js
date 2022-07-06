@@ -8,18 +8,21 @@ const Person = ({person}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '4002-8922'
-    }
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   const addNewPerson = (event) => {
     event.preventDefault()
     const personObj = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     }
 
     if (persons.find(person => person.name.toUpperCase() === personObj.name.toUpperCase())) {
@@ -41,9 +44,14 @@ const App = () => {
     console.log(newNumber)
   }
 
+  const filterResults = persons.filter(person => person.name.toUpperCase().includes(filter.toUpperCase()))
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      filter shown with
+      <input onChange={(event) => setFilter(event.target.value)} />
+      <h2>Numbers</h2>
       <form onSubmit={addNewPerson} >
         <div>
           name: <input value={newName} onChange={handleNameInputChange} />
@@ -57,7 +65,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {
-        persons.map(person => <Person key={person.name} person={person} />)
+        filterResults.map(person => <Person key={person.id} person={person} />)
       }
     </div>
   )
