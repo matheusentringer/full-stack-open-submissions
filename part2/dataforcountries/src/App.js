@@ -8,8 +8,12 @@ const Language = ({ language }) => {
 }
 
 const Country = ({ country }) => {
+  const [show, setShow] = useState(false);
   return (
-    <div>{country.name.common}</div>
+    <div>
+      <div>{country.name.common} <button onClick={() => setShow(prev => !prev)}>{show ? "Hide" : "Show"}</button></div>
+      {show && <CountryInfo country={country} />}
+    </div>
   )
 }
 
