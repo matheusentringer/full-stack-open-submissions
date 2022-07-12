@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-
-const Person = ({ person }) => {
+const Button = ({ text, handleClick }) => {
   return (
-    <div>{person.name} {person.number}</div>
+    <button onClick={handleClick}>{text}</button>
+  )
+}
+
+const Person = ({ person, deletePerson }) => {
+  return (
+    <div>{person.name} {person.number} <Button text="Delete" handleClick={() => deletePerson(person)} /> </div>
   )
 }
 
@@ -28,8 +33,8 @@ const PersonForm = ({ addNewPerson, newName, handleNameInputChange, newNumber, h
   </form>
 )
 
-const PersonList = ({ filterResults }) => (
-  filterResults.map(person => <Person key={person.id} person={person} />)
+const PersonList = ({ filterResults, deletePerson }) => (
+  filterResults.map(person => <Person key={person.id} person={person} deletePerson={deletePerson} />)
 )
 
 const App = () => {
@@ -55,8 +60,18 @@ const App = () => {
       number: newNumber,
     }
 
-    if (persons.find(person => person.name.toUpperCase() === personObj.name.toUpperCase())) {
-      alert(`${newName} is already added to phonebook`)
+    let person = persons.find(person => person.name.toUpperCase() === personObj.name.toUpperCase())
+
+    if (person) {
+      if (window.confirm(`${person.name} is already added to the phonebook, replace the old number with a new one?`)){
+        personService
+        .update(person.id, personObj)
+        .then(returnedPerson => {
+          setPersons(persons.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
+          setNewNumber('')
+          setNewName('')
+        })
+      }
     } else {
       personService
       .create(personObj)
@@ -64,6 +79,17 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewNumber('')
         setNewName('')
+      })
+    }
+  }
+
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)){
+      personService
+      .remove(person.id)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.filter(p => p.id !== person.id))
       })
     }
   }
@@ -97,7 +123,7 @@ const App = () => {
         handleNumberInputChange={handleNumberInputChange}
       />
       <h2>Numbers</h2>
-      <PersonList filterResults={filterResults} />
+      <PersonList filterResults={filterResults} deletePerson={deletePerson} />
     </div>
   )
 }
