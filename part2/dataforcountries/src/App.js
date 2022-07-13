@@ -17,7 +17,44 @@ const Country = ({ country }) => {
   )
 }
 
+const Weather = ({ country }) => {
+  const [weather, setWeather] = useState({
+    weather: [
+      {
+        icon: ""
+      }
+    ],
+    main: {
+      temp: ""
+    },
+    wind: {
+      speed: "",
+    }
+    })
+
+  useEffect(() => {
+    const api_key = process.env.REACT_APP_API_KEY
+    axios
+    .get(`https://api.openweathermap.org/data/2.5/weather?lat=${country.capitalInfo.latlng[0]}&lon=${country.capitalInfo.latlng[1]}&appid=${api_key}`)
+    .then(response => {
+      setWeather(response.data)
+      console.log(response.data)
+    })
+  } ,[country])
+
+  return(
+    <div>
+      <h2>Weather in {country.capital}</h2>
+      <div>Temperature {Math.round(weather.main.temp - 273.15)} °C</div>
+      <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="weather icon"></img>
+      <div>Wind {weather.wind.speed} m/s</div>
+    </div>
+  )
+
+}
+
 const CountryInfo = ({ country }) => {
+
   return (
     <div>
       <h1>{country.name.common}</h1>
@@ -28,6 +65,8 @@ const CountryInfo = ({ country }) => {
       { Object.entries(country.languages).map(([k, v]) => <Language key={k} language={v} /> ) }
       <br/>
       <div><img src={country.flags.svg} alt="flag" style={{"maxWidth": "200px"}} ></img></div>
+
+      <Weather country={country} />
 
     </div>
   )
