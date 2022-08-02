@@ -95,6 +95,9 @@ const App = () => {
           setNewName('')
           callNotification(`${returnedPerson.name}'s number was changed to ${returnedPerson.number}`, 'success')
         })
+        .catch(error => {
+          callNotification(error.response.data.error, 'error')
+        })
       }
     } else {
       personService
@@ -104,6 +107,9 @@ const App = () => {
         setNewNumber('')
         setNewName('')
         callNotification(`${returnedPerson.name} was added to the phonebook`, 'success')
+      })
+      .catch(error => {
+        callNotification(error.response.data.error, 'error')
       })
     }
   }
